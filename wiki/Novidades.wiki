@@ -1,0 +1,39 @@
+#summary Aqui você pode encontrar novidades em desenvolvimento!
+#labels Featured,Phase-Design
+
+= SOmBRA X2.2 =
+
+A nova versão em andamento conta com novidades em relação as anteriores, como:
+
+  * Versão 32/64-bit
+  * VM86 (32-bit) / x86emu (64-bit)
+  * Melhor suporte a sistema de paginação
+     * mmap()
+     * acesso via /dev/mem & /dev/kmem
+  * initrd com formato Tar (initrd.tar)
+
+
+= Imagens =
+
+Abaixo pode ser uma série de imagens do desenvolvimento do kernel.
+
+== Operação Inválida (GPF) modo usuário ==
+
+[http://imageshack.us/f/253/printtf.png/ http://img253.imageshack.us/img253/6218/printtf.png]
+
+== Chamadas de sistema ==
+
+  * Processo 201: Formato ELF32
+  * Processo 202: Formato ELF64
+
+[http://imageshack.us/photo/my-images/214/syscall.png/ http://img214.imageshack.us/img214/8069/syscall.png]
+
+== Executando Programas de 32-bit (Programas do SOmBRA X2.1) ==
+
+[http://imageshack.us/content_round.php?page=done&l=img99/7681/sombrax64.png http://img99.imageshack.us/img99/7681/sombrax64.png]
+
+[http://imageshack.us/content_round.php?page=done&l=img690/1459/sombralspci.png http://img690.imageshack.us/img690/1459/sombralspci.png]
+
+== Teste de fork ==
+
+[http://imageshack.us/photo/my-images/15/forke.png/ http://img15.imageshack.us/img15/6889/forke.png]

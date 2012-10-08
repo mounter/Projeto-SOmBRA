@@ -1,0 +1,185 @@
+00000000000i[     ] Bochs x86 Emulator 2.5.1
+00000000000i[     ]   Built from SVN snapshot on January 6, 2012
+00000000000i[     ] Compiled on Jan  6 2012 at 21:28:14
+00000000000i[     ] System configuration
+00000000000i[     ]   processors: 1 (cores=1, HT threads=1)
+00000000000i[     ]   A20 line support: yes
+00000000000i[     ] IPS is set to 10000000
+00000000000i[     ] CPU configuration
+00000000000i[     ]   level: 6
+00000000000i[     ]   SMP support: no
+00000000000i[     ]   APIC support: xapic
+00000000000i[     ]   FPU support: yes
+00000000000i[     ]   MMX support: yes
+00000000000i[     ]   3dnow! support: no
+00000000000i[     ]   SEP support: yes
+00000000000i[     ]   SSE support: sse2
+00000000000i[     ]   XSAVE support: no 
+00000000000i[     ]   AES support: no
+00000000000i[     ]   MOVBE support: no
+00000000000i[     ]   x86-64 support: yes
+00000000000i[     ]   1G paging support: no
+00000000000i[     ]   MWAIT support: yes
+00000000000i[     ] Optimization configuration
+00000000000i[     ]   RepeatSpeedups support: yes
+00000000000i[     ]   Fast function calls: yes
+00000000000i[     ]   Handlers Chaining speedups: yes
+00000000000i[     ] Devices configuration
+00000000000i[     ]   NE2000 support: yes
+00000000000i[     ]   PCI support: yes, enabled=yes
+00000000000i[     ]   SB16 support: yes
+00000000000i[     ]   USB support: yes
+00000000000i[     ]   VGA extension support: vbe cirrus
+00000000000i[MEM0 ] allocated memory at 03520020. after alignment, vector=03521000
+00000000000i[MEM0 ] 32,00MB
+00000000000i[MEM0 ] mem block size = 0x00100000, blocks=32
+00000000000i[MEM0 ] rom at 0xfffe0000/131072 ('C:\Program Files (x86)\Bochs-2.5.1/BIOS-bochs-latest')
+00000000000i[CMOS ] Using local time for initial clock
+00000000000i[CMOS ] Setting initial clock to: Thu Aug 16 18:24:15 2012 (time0=1345152255)
+00000000000i[DMA  ] channel 4 used by cascade
+00000000000i[DMA  ] channel 2 used by Floppy Drive
+00000000000i[PCI  ] 440FX Host bridge present at device 0, function 0
+00000000000i[PCI  ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
+00000000000i[MEM0 ] Register memory access handlers: 0x00000000000a0000 - 0x00000000000bffff
+00000000000i[WGUI ] Desktop Window dimensions: 1360 x 768
+00000000000i[WGUI ] Number of Mouse Buttons = 5
+00000000000i[WGUI ] IME disabled
+00000000000i[VGA  ] interval=333333
+00000000000i[MEM0 ] Register memory access handlers: 0x00000000e0000000 - 0x00000000e0ffffff
+00000000000i[BXVGA] VBE Bochs Display Extension Enabled
+00000000000i[MEM0 ] rom at 0xc0000/41472 ('C:\Program Files (x86)\Bochs-2.5.1/VGABIOS-lgpl-latest')
+00000000000i[     ] init_dev of 'acpi' plugin device by virtual method
+00000000000i[PCI  ] ACPI Controller present at device 1, function 3
+00000000000i[     ] init_dev of 'unmapped' plugin device by virtual method
+00000000000i[     ] init_dev of 'biosdev' plugin device by virtual method
+00000000000i[     ] init_dev of 'speaker' plugin device by virtual method
+00000000000i[     ] init_dev of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] init_dev of 'gameport' plugin device by virtual method
+00000000000i[     ] init_dev of 'ioapic' plugin device by virtual method
+00000000000i[IOAP ] initializing I/O APIC
+00000000000i[MEM0 ] Register memory access handlers: 0x00000000fec00000 - 0x00000000fec00fff
+00000000000i[     ] init_dev of 'keyboard' plugin device by virtual method
+00000000000i[KBD  ] will paste characters every 1000 keyboard ticks
+00000000000i[     ] init_dev of 'harddrv' plugin device by virtual method
+00000000000i[HD   ] CD on ata0-0: 'SOmBRA.iso'
+00000000000i[CD1  ] load cdrom with path=SOmBRA.iso
+00000000000i[CD1  ] Opening image file as a cd
+00000000000i[HD   ] Media present in CD-ROM drive
+00000000000i[HD   ] Capacity is 596 sectors (1,16 MB)
+00000000000i[HD   ] Using boot sequence cdrom, none, none
+00000000000i[HD   ] Floppy boot signature check is enabled
+00000000000i[     ] init_dev of 'pci_ide' plugin device by virtual method
+00000000000i[PCI  ] PIIX3 PCI IDE controller present at device 1, function 1
+00000000000i[     ] init_dev of 'serial' plugin device by virtual method
+00000000000i[SER  ] com1 at 0x03f8 irq 4
+00000000000i[     ] init_dev of 'parallel' plugin device by virtual method
+00000000000i[PAR  ] parallel port 1 at 0x0378 irq 7
+00000000000i[     ] register state of 'acpi' plugin device by virtual method
+00000000000i[     ] register state of 'unmapped' plugin device by virtual method
+00000000000i[     ] register state of 'biosdev' plugin device by virtual method
+00000000000i[     ] register state of 'speaker' plugin device by virtual method
+00000000000i[     ] register state of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] register state of 'gameport' plugin device by virtual method
+00000000000i[     ] register state of 'ioapic' plugin device by virtual method
+00000000000i[     ] register state of 'keyboard' plugin device by virtual method
+00000000000i[     ] register state of 'harddrv' plugin device by virtual method
+00000000000i[     ] register state of 'pci_ide' plugin device by virtual method
+00000000000i[     ] register state of 'serial' plugin device by virtual method
+00000000000i[     ] register state of 'parallel' plugin device by virtual method
+00000000000i[SYS  ] bx_pc_system_c::Reset(HARDWARE) called
+00000000000i[CPU0 ] cpu hardware reset
+00000000000i[APIC0] allocate APIC id=0 (MMIO enabled) to 0x00000000fee00000
+00000000000i[CPU0 ] CPUID[0x00000000]: 00000005 756e6547 6c65746e 49656e69
+00000000000i[CPU0 ] CPUID[0x00000001]: 00000633 00010800 00002008 0fcbfbff
+00000000000i[CPU0 ] CPUID[0x00000002]: 00410601 00000000 00000000 00000000
+00000000000i[CPU0 ] CPUID[0x00000003]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0 ] CPUID[0x00000004]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0 ] CPUID[0x00000005]: 00000040 00000040 00000003 00000020
+00000000000i[CPU0 ] CPUID[0x80000000]: 80000008 00000000 00000000 00000000
+00000000000i[CPU0 ] CPUID[0x80000001]: 00000000 00000000 00000101 2a100000
+00000000000i[CPU0 ] CPUID[0x80000002]: 20202020 20202020 20202020 6e492020
+00000000000i[CPU0 ] CPUID[0x80000003]: 286c6574 50202952 69746e65 52286d75
+00000000000i[CPU0 ] CPUID[0x80000004]: 20342029 20555043 20202020 00202020
+00000000000i[CPU0 ] CPUID[0x80000005]: 01ff01ff 01ff01ff 40020140 40020140
+00000000000i[CPU0 ] CPUID[0x80000006]: 00000000 42004200 02008140 00000000
+00000000000i[CPU0 ] CPUID[0x80000007]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0 ] CPUID[0x80000008]: 00003028 00000000 00000000 00000000
+00000000000i[     ] reset of 'acpi' plugin device by virtual method
+00000000000i[     ] reset of 'unmapped' plugin device by virtual method
+00000000000i[     ] reset of 'biosdev' plugin device by virtual method
+00000000000i[     ] reset of 'speaker' plugin device by virtual method
+00000000000i[     ] reset of 'extfpuirq' plugin device by virtual method
+00000000000i[     ] reset of 'gameport' plugin device by virtual method
+00000000000i[     ] reset of 'ioapic' plugin device by virtual method
+00000000000i[     ] reset of 'keyboard' plugin device by virtual method
+00000000000i[     ] reset of 'harddrv' plugin device by virtual method
+00000000000i[     ] reset of 'pci_ide' plugin device by virtual method
+00000000000i[     ] reset of 'serial' plugin device by virtual method
+00000000000i[     ] reset of 'parallel' plugin device by virtual method
+00000004849i[BIOS ] $Revision: 10789 $ $Date: 2011-11-24 17:03:51 +0100 (Do, 24. Nov 2011) $
+00000322552i[KBD  ] reset-disable command received
+00000328342i[BIOS ] Starting rombios32
+00000328789i[BIOS ] Shutdown flag 0
+00000329399i[BIOS ] ram_size=0x02000000
+00000329834i[BIOS ] ram_end=32MB
+00000429892i[BIOS ] Found 1 cpu(s)
+00000446146i[BIOS ] bios_table_addr: 0x000fbde8 end=0x000fcc00
+00000446229i[PCI  ] 440FX PMC write to PAM register 59 (TLB Flush)
+00000773929i[PCI  ] 440FX PMC write to PAM register 59 (TLB Flush)
+00001101851i[P2I  ] PCI IRQ routing: PIRQA# set to 0x0b
+00001101879i[P2I  ] PCI IRQ routing: PIRQB# set to 0x09
+00001101900i[P2I  ] PCI IRQ routing: PIRQC# set to 0x0b
+00001101921i[P2I  ] PCI IRQ routing: PIRQD# set to 0x09
+00001101921i[P2I  ] write: ELCR2 = 0x0a
+00001102730i[BIOS ] PIIX3/PIIX4 init: elcr=00 0a
+00001110437i[BIOS ] PCI: bus=0 devfn=0x00: vendor_id=0x8086 device_id=0x1237 class=0x0600
+00001112752i[BIOS ] PCI: bus=0 devfn=0x08: vendor_id=0x8086 device_id=0x7000 class=0x0601
+00001114906i[BIOS ] PCI: bus=0 devfn=0x09: vendor_id=0x8086 device_id=0x7010 class=0x0101
+00001115112i[PIDE ] new BM-DMA address: 0xc000
+00001115775i[BIOS ] region 4: 0x0000c000
+00001117840i[BIOS ] PCI: bus=0 devfn=0x0b: vendor_id=0x8086 device_id=0x7113 class=0x0680
+00001118065i[ACPI ] new irq line = 11
+00001118087i[ACPI ] new irq line = 9
+00001118108i[ACPI ] new PM base address: 0xb000
+00001118140i[ACPI ] new SM base address: 0xb100
+00001118140i[PCI  ] setting SMRAM control register to 0x4a
+00001282260i[CPU0 ] Enter to System Management Mode
+00001282264i[CPU0 ] RSM: Resuming from System Management Mode
+00001446283i[PCI  ] setting SMRAM control register to 0x0a
+00001455047i[BIOS ] MP table addr=0x000fbec0 MPC table addr=0x000fbdf0 size=0xd0
+00001456900i[BIOS ] SMBIOS table addr=0x000fbed0
+00001459126i[BIOS ] ACPI tables: RSDP addr=0x000fbff0 ACPI DATA addr=0x01ff0000 size=0x988
+00001462390i[BIOS ] Firmware waking vector 0x1ff00cc
+00001463721i[PCI  ] 440FX PMC write to PAM register 59 (TLB Flush)
+00001464480i[BIOS ] bios_table_cur_addr: 0x000fc014
+00001592094i[VBIOS] VGABios $Id: vgabios.c,v 1.75 2011/10/15 14:07:21 vruppert Exp $
+00001592164i[BXVGA] VBE known Display Interface b0c0
+00001592196i[BXVGA] VBE known Display Interface b0c5
+00001595122i[VBIOS] VBE Bios $Id: vbe.c,v 1.64 2011/07/19 18:25:05 vruppert Exp $
+00005810167i[BIOS ] IDE time out
+00013333322i[WGUI ] dimension update x=720 y=400 fontheight=16 fontwidth=9 bpp=8
+00035752658i[BIOS ] Booting from 07c0:0000
+00036015421i[BIOS ] int13_harddisk: function 41, unmapped device for ELDL=80
+00036020198i[BIOS ] int13_harddisk: function 08, unmapped device for ELDL=80
+00036024850i[BIOS ] *** int 15h function AX=00c0, BX=0000 not yet supported!
+02970000000p[WGUI ] >>PANIC<< Window closed, exiting!
+02970000000i[CPU0 ] CPU is in protected mode (halted)
+02970000000i[CPU0 ] CS.mode = 32 bit
+02970000000i[CPU0 ] SS.mode = 32 bit
+02970000000i[CPU0 ] | EAX=00000000  EBX=00000021  ECX=0012d004  EDX=001010ae
+02970000000i[CPU0 ] | ESP=0012d004  EBP=00067eac  ESI=00054862  EDI=00054867
+02970000000i[CPU0 ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf ZF af PF cf
+02970000000i[CPU0 ] | SEG sltr(index|ti|rpl)     base    limit G D
+02970000000i[CPU0 ] |  CS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+02970000000i[CPU0 ] |  DS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+02970000000i[CPU0 ] |  SS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+02970000000i[CPU0 ] |  ES:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+02970000000i[CPU0 ] |  FS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+02970000000i[CPU0 ] |  GS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+02970000000i[CPU0 ] | EIP=00100098 (00100098)
+02970000000i[CPU0 ] | CR0=0xe0000011 CR2=0x00000000
+02970000000i[CPU0 ] | CR3=0x001bc000 CR4=0x00000000
+02970000000i[CPU0 ] 0x0000000000100098>> jmp .-3 (0x00100097) : EBFD
+02970000000i[CMOS ] Last time is 1345152552 (Thu Aug 16 18:29:12 2012)
+02970000000i[     ] restoring default signal behavior
+02970000000i[CTRL ] quit_sim called with exit code 1

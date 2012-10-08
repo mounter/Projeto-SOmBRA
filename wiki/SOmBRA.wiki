@@ -1,0 +1,38 @@
+#summary Sistema Operacional mais BRAsileiro
+#labels Phase-Design
+
+É um projeto que visa a criação de um sistema operacional brasileiro.
+
+=== Origens ===
+
+Na Unidev (www.unidev.com.br) em 17 de Janeiro de 2005, através do membro CrociDB, vimos a nascimento da idéia da criação de um sistema operacional brasileiro.
+
+=== Ascensão e queda ===
+
+Inicialmente apareceram muitos membros para ajudar, tanto em idéias e sugestões, mas com o passar do tempo a separação das idéias de desenvolvimento e organização do projeto começaram a fazer os membros saírem e com isso o projeto ficou em estado zumbi por muito tempo.
+
+=== SOmBRA 0.3.3b ===
+
+Surgido de uma experiência com um núcleo doado ao projeto SOmBRA por um de seus membros participantes, mas isso não fez o quadro do projeto mudar.
+
+=== Ressurreição e novas espectativas ===
+
+Houve fora está, outra tentativa de chamar usuários ao projeto, mas foi um fracasso total. Mas agora, estamos com novas espectativas e metas, e aos poucos está surgindo os resultados de pesquisas feitas durante estes dois anos de desenvolvimento.
+
+=== Protótipos ===
+
+Com o núcleo SOmBRA 0.3.3b foram feitas várias experiências através da criação de protótipos e aos quais darão os próximos rumos nas versões.
+
+=== Atualmente ===
+
+O projeto está em sua versão 0.3.5b e ganhando aperfeiçoamentos na organização das pastas e novas modificações cruciais, objetivando o uso de API's e paginação.
+
+=== Metas e organização ===
+
+Temos como meta o planejamento de um sistema operacional nos padrões POSIX com o uso de paginação e outras técnicas avançadas. Algumas das próximas metas serão a recriação do site, o blog e uma Wiki do projeto, sendo esses agrupados dentro da OSDev Brasil e fazer com que o projeto OSDev-BR seja um modelo de sua padronização.
+
+Quanto a organização, estamos tomando certas medidas para a reestruturação do projeto.
+
+=== Finalizando ===
+
+Queremos que o sistema seja o mais completo por sí e que este sirva de modelo a outros sistema e desenvolvedores, tanto em vontade de criar e aprender.

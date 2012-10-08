@@ -1,0 +1,4 @@
+
+FILES := video.c kbd.c timer.c rtc.c ps2mouse.c
+SRC += $(patsubst %, drivers/%, $(filter %.c, $(FILES)))
+SRC += $(patsubst %, drivers/%, $(filter %.S, $(FILES)))

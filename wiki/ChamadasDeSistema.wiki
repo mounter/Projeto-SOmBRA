@@ -1,0 +1,383 @@
+#summary Chamadas de sistema para o SOmBRA 0.3.x
+#labels Phase-Implementation,Phase-Design
+
+== Introdução ==
+
+As chamadas de sistema são o meio pelo qual os processos podem se comunicar com o sistema operacional em busca de recursos e de ações para serem executadas.
+
+No SOmBRA as chamadas de sistema devem ser executadas pela interrupção 0x30 (int 0x30) e os parâmetros são enviados através dos registradores (como ocorre no MS-DOS).
+
+== Lista de Chamadas ==
+
+Aqui será apresentado a lista de chamadas implementadas pelo SOmBRA 0.3.x e os valores que cada registrador deve conter.
+
+Por padrão o registrador eax deverá conter o valor que equivale a um identificador de chamada e que podem possuir os seguintes valores:
+
+{{{
+# Manipulação de arquivos
+SYSCALL_OPEN		100
+SYSCALL_CLOSE		101
+SYSCALL_READ		102
+SYSCALL_WRITE		103
+SYSCALL_SELECT		104
+
+# Manipulação do console
+SYSCALL_GOTOXY		200
+SYSCALL_CLEAR		201
+SYSCALL_SETCOLOR	202
+SYSCALL_GETXY		203
+
+# Manipulação de tempo
+SYSCALL_GETTIME		300
+SYSCALL_GETDAY		301
+SYSCALL_SLEEP		302
+
+# Manipulação de executaveis
+SYSCALL_GETPID		400
+SYSCALL_EXEC		401
+SYSCALL_EXIT		402
+SYSCALL_GETPPID		403
+SYSCALL_WAIT4PID	404
+SYSCALL_PROCESS		405
+SYSCALL_EXECLIST	406
+SYSCALL_EXECID		407
+SYSCALL_EXECP		408
+
+# Mostra a versão do sistema
+SYSCALL_VERSION		600
+
+# Controle de dispositivos PCI
+SYSCALL_PCICOUNT	700
+SYSCALL_PCIDEV		701
+
+SYSCALL                 int 0x30
+}}}
+
+*ATENÇÃO*: Está lista poderá ter seus valores alterados conforme o amadurecimento do sistema. Partindo da versão 1 elas não serão mais alteradas!
+
+Para cada uma das chamadas de sistema os registradores deverão ter os valores apropriados, abaixo você pode conferir cada uma delas:
+
+*Observação*: Estamos usando uma pseudo-linguagem para exemplificar.
+
+=== SYSCALL_OPEN ===
+
+*Descrição*: Faz a abertura de um arquivo apontado por PATH.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_OPEN
+ebx = path         # Ponteiro para string com terminador nulo
+ecx = access       # Ainda não usado ( ecx = 0 )
+SYSCALL            # int 0x30
+$ID = eax          # Agora eax possui o ID de recurso para o arquivo!
+}}}
+
+=== SYSCALL_CLOSE ===
+
+*Descrição*: Fecha um arquivo apontado pelo ID de recurso.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_CLOSE
+ebx = ID           # ID do recurso
+SYSCALL
+}}}
+
+=== SYSCALL_READ ===
+
+*Descrição*: Faz a leitura de dados de um arquivo.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_READ
+ebx = buffer       # Ponteiro para onde será enviado os dados
+ecx = length       # Quantos bytes serão lidos
+edx = ID           # ID do recurso
+SYSCALL
+$readed = eax      # Quantos bytes foram realmente lidos
+}}}
+
+=== SYSCALL_WRITE ===
+
+*Descrição*: Faz a escrita de dados em um arquivo.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_WRITE
+ebx = buffer       # Ponteiro para onde será enviado os dados
+ecx = length       # Quantos bytes serão enviados
+edx = ID           # ID do recurso
+SYSCALL
+$writed = eax      # Quantos bytes foram realmente escritos
+}}}
+
+=== SYSCALL_SELECT ===
+
+*Descrição*: Altera o modo de um arquivo.
+
+*Estado*: Ainda não foi implementado.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_SELECT
+ebx = timeout      # Tempo para leitura/escrita
+ecx = access       # Modo de acesso
+edx = ID           # ID do recurso
+SYSCALL
+$ok = eax          # Ação concluída?
+}}}
+
+=== SYSCALL_GOTOXY ===
+
+*Descrição*: Altera a posição do cursor no console.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_GOTOXY
+ebx = ID           # ID do recurso de video
+ecx = pos          # Posição do cursor (modo linear)
+SYSCALL
+}}}
+
+=== SYSCALL_CLEAR ===
+
+*Descrição*: Apaga o conteúdo do console.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_CLEAR
+ebx = ID           # ID do recurso de video
+SYSCALL
+}}}
+
+=== SYSCALL_SETCOLOR ===
+
+*Descrição*: Altera as cores de texto e fundo do console.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_SETCOLOR
+ebx = ID           # ID do recurso de video
+ecx = text         # Cor do texto (0..15)
+edx = background   # Cor do fundo (0..15)
+SYSCALL
+}}}
+
+=== SYSCALL_GETXY ===
+
+*Descrição*: Retorna a posição do cursor no console.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_GETXY
+ebx = ID           # ID do recurso de video
+SYSCALL
+$pos = eax         # Posição do cursor (modo linear)
+}}}
+
+=== SYSCALL_GETTIME ===
+
+*Descrição*: Retorna a tempo do sistema.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_GETTIME
+SYSCALL
+$time = eax         # Tempo do sistema (h:m:s)
+}}}
+
+=== SYSCALL_GETDAY ===
+
+*Descrição*: Retorna a data do sistema.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_GETDAY
+SYSCALL
+$date = eax         # Data do sistema (d:m:y)
+}}}
+
+=== SYSCALL_SLEEP ===
+
+*Descrição*: Poem um processo para dormir.
+
+*Estado*: Ainda não implementado.
+
+=== SYSCALL_GETPID ===
+
+*Descrição*: Retorna o id do processo (PID).
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_GETPID
+SYSCALL
+$pid = eax          # PID do processo
+}}}
+
+=== SYSCALL_EXEC ===
+
+*Descrição*: Executa um processo na ordem que é listado. Ver comando list do shell.
+
+*Estado*: Inutilizado. Desaprovado para uso a partir da versão 0.3.5a.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_EXEC
+ebx = appid         # Numero da aplicação
+SYSCALL
+$pid = eax          # PID do novo processo
+}}}
+
+=== SYSCALL_EXIT ===
+
+*Descrição*: Saí do processo atual.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_EXIT
+ebx = estado        # Estado da saída (0 = OK)
+SYSCALL
+}}}
+
+=== SYSCALL_GETPPID ===
+
+*Descrição*: Retorna o PID do processo pai.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_GETPPID
+SYSCALL
+$pid = eax          # PID do processo pai
+}}}
+
+=== SYSCALL_WAIT4PID ===
+
+*Descrição*: Retorna o PID do processo pai.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_WAIT4PID
+ebx = PID           # PID do processo filho
+SYSCALL
+$exit = eax         # Estado do processo ao terminar
+}}}
+
+=== SYSCALL_PROCESS ===
+
+*Descrição*: Preenche uma estrutura de dados sobre os processos. Ver programa [http://code.google.com/p/projeto-sombra/source/browse/trunk/progr/gt.c gt].
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_PROCESS
+ebx = estrutura     # Ponteiro para a estrutura
+ecx = num           # Numero de processos para listar
+SYSCALL
+$total = eax        # Total de processos listados
+}}}
+
+=== SYSCALL_EXECLIST ===
+
+*Descrição*: Retorna lista de nome de processos que pode ser executados.
+
+*Estado*: Função interna ao shell. Recomendado não usar.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_EXECLIST
+ebx = name          # Ponteiro para string
+ecx = id            # Numero do processo na lista
+SYSCALL
+$total = eax        # Total de processos que podem ser listados
+}}}
+
+=== SYSCALL_EXECID ===
+
+*Descrição*: Executa um processo pelo seu nome.
+
+*Estado*: Inutilizado a partir da versão 0.3.6a, mantido para retro-compatibilidade.
+
+*Sistema*: SOmBRA 0.3.3a
+
+{{{
+eax = SYSCALL_EXECID
+ebx = name         # Ponteiro para string terminado em nulo
+SYSCALL
+$pid = eax         # PID do novo processo
+}}}
+
+=== SYSCALL_EXECP ===
+
+*Descrição*: Executa um processo pelo seu nome, parâmetros e variáveis de ambiente.
+
+*Sistema*: SOmBRA 0.3.6a
+
+{{{
+eax = SYSCALL_EXECID
+ebx = name         # Ponteiro para string terminado em nulo
+ecx = argp         # Ponteiro para vetor de ponteiro de strings, 
+                   # último ponteiro terminado em nulo
+edx = envp         # O mesmo que o argp, só que para variáveis de ambiente.
+SYSCALL
+$pid = eax         # PID do novo processo
+}}}
+
+=== SYSCALL_VERSION ===
+
+*Descrição*: Mostra a mensagem de versão do sistema.
+
+*Estado*: Inutilizado. Usado somente no Shell.
+
+*Sistema*: SOmBRA 0.3.3
+
+{{{
+eax = SYSCALL_VERSION
+SYSCALL
+}}}
+
+=== SYSCALL_PCICOUNT ===
+
+*Descrição*: Quantidade de dispositivos PCI do sistema. Ver programa lspci.
+
+*Sistema*: SOmBRA 0.3.6a
+
+{{{
+eax = SYSCALL_PCICOUNT
+SYSCALL
+$count = eax
+}}}
+
+=== SYSCALL_PCIDEV ===
+
+*Descrição*: Preenche estrutura de dados com informações sobre os dispositivos PCI. Ver programa lspci.
+
+*Sistema*: SOmBRA 0.3.6a
+
+{{{
+eax = SYSCALL_PCIDEV
+ebx = estrutura   # Ponteiro da estrutura de informação
+ecx = id          # ID do dispositivo
+SYSCALL
+$count = eax
+}}}
+
+== Concluindo ==
+
+Por enquanto essa são a lista das chamadas de sistema que podem ser encontradas até o SOmBRA 0.3.7a, para uma lista mais atualiza sempre verifique pela última versão da stdlib.

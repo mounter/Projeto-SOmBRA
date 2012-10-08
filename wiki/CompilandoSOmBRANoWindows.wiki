@@ -1,0 +1,27 @@
+#summary Como compilar o SOmBRA no Windows
+#labels Featured,Phase-Deploy
+
+= Introdução =
+
+Como muitos chegam ao fórum perguntando como compilar o SOmBRA, esse tutorial apresentará como se conclui está tarefa no Windows. Para compilar no Linux aconselho olhar está entrada [CompilandoSomBRANoLinux] na wiki.
+
+<wiki:gadget url="http://www.worm.sh/custom_adsense.xml" up_g_client="pub-5368044411877758" up_g_slot="5954749935" up_g_format="468x15" width="468" height="15" border="0" />
+
+= Ferramentas =
+
+ * SDK-SOMBRA - [http://projeto-sombra.googlecode.com/files/sdk-sombra.part1.exe Parte1] | [http://projeto-sombra.googlecode.com/files/sdk-sombra.part2.rar Parte2] : Baixar as duas partes e executar sdk-sombra.part1.exe.
+ * Cygwin - http://www.cygwin.com/setup.exe
+ * CDRTools - http://smithii.com/cdrtools
+ * Bochs - http://bochs.sf.net : Caso queira emular a imagem ISO.
+
+<wiki:gadget url="http://www.worm.sh/custom_adsense.xml" up_g_client="pub-5368044411877758" up_g_slot="5954749935" up_g_format="468x15" width="468" height="15" border="0" />
+
+= Compilando =
+
+Baixe a ultima versão do SOmBRA e extraia em um local apropriado. Após feito isso, caso tenha extraido e instalado as ferramentas nos locais apropriados, edite o arquivo cp.bat, alterando a linha *PATH = C:\sdk-sombra\bin;C:\cdrtools;C:\cygwin\bin;%PATH%* para o local de onde você instalou as ferramentas, feito isso execute cp.bat.
+
+Pronto, assim você terá compilado *kernel.elf* e gerado a imagem de CD *SOmBRA.iso*, caso queira emular a imagem ISO, execute *bochsrc.bxrc*.
+
+=== Compilando os programas ===
+
+Se você deseja compilar os programas necessários ao SOmBRA, siga para a entrada CompilandoProgramas.

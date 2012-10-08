@@ -1,0 +1,55 @@
+#summary Imagens do sistema operacional e programas
+#labels Featured
+
+= Screenshots =
+
+Aqui você poderá encontra algumas imagens do sistema operacional e alguns dos programas desenvolvidos nele.
+
+
+== Imagens ==
+
+=== Tela inicial do sistema + Shell ===
+
+http://img233.imageshack.us/img233/6593/sombrainityy4.jpg
+
+----
+
+=== Gerenciador de Tarefas ===
+
+http://img225.imageshack.us/img225/1146/sombragtde3.jpg
+
+----
+
+=== Leitor de Arquivo ===
+
+http://img233.imageshack.us/img233/124/sombrafilesfg3.jpg
+
+----
+
+=== Lendo teclado usando leitor de arquivo ===
+
+http://img150.imageshack.us/img150/6241/sombrafiles2yk0.jpg
+
+----
+
+=== Programa LSPCI ===
+
+http://img229.imageshack.us/img229/9766/lspcirl1.jpg
+
+----
+
+=== Listando dispositivos PCI ===
+
+http://img135.imageshack.us/img135/9140/lspci2wt0.jpg
+
+----
+
+=== Vendo data do sistema ===
+
+http://img233.imageshack.us/img233/7991/sombradatayj4.jpg
+
+----
+
+== Anúncio ==
+
+O SOmBRA 0.3.7a não está suficiente estável para ser publicado, pois ainda está faltando melhorar alguns programas e mais algumas chamadas de sistema. Por enquanto fiquem com essas imagens, e que isso mostre o que está por vir no futuro.

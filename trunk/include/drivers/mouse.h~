@@ -1,0 +1,12 @@
+#ifndef _MOUSE_H
+#define _MOUSE_H
+
+#define MOUSE_SETSCAL11
+#define MOUSE_SETSCAL21
+#define MOUSE_SETRES
+#define MOUSE_STATREQ
+#define MOUSE_
+
+void mouse_install(void);
+
+#endif
