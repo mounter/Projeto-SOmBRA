@@ -1,8 +1,0 @@
-Import('config')
-from util import FeatureSources
-
-sources = FeatureSources(config, [
-
-])
-
-Return('sources')

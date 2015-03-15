@@ -4,7 +4,7 @@ Import(*vars)
 from util import FeatureSources
 
 sources = FeatureSources(config, [
-    'test.c'
+    'init.c'
 ])
 
 # Set the include search paths.

@@ -1,6 +1,11 @@
-OUTPUT_FORMAT(elf64-x86-64)
-ENTRY(SOmBRA)
+OUTPUT_ARCH("i386:x86-64")
+OUTPUT_FORMAT("elf64-x86-64")
+
+/* Define o ponto de entrada */
+ENTRY(kmain)
+
 KERNEL_VMA = 0x200000; /* Vamos aos 2MB */
+
 SECTIONS
 {
 	.text KERNEL_VMA : AT(KERNEL_VMA)

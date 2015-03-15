@@ -4,3 +4,13 @@
 
 # Libraries
 *.a
+
+# Pasta de output
+build/
+
+# Ficheiros temporarios do SCONS
+.options.cache
+.sconsign.dblite
+
+# Ficheiros temporarios do sistema
+.DS_Store
