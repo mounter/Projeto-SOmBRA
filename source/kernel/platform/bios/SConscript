@@ -1,0 +1,16 @@
+Import('config', 'defaults', 'env')
+from util import FeatureSources
+
+sources = FeatureSources(config, [
+    'start.S'
+])
+
+# Set the linker script path.
+env['LDSCRIPT'] = env.LDScript('link.ld', 'link.ld.in')
+
+# Build the final kernel binary.
+kernel = env.Command(env['OUTDIR'].File('kernel'), env['KERNEL'],
+    Action('$OBJCOPY -O binary --strip-all $SOURCE $TARGET', '$GENCOMSTR'))
+defaults.append(kernel)
+
+Return('sources')

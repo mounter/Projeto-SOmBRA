@@ -1,0 +1,41 @@
+vars = ['config', 'defaults', 'env']
+
+Import(*vars)
+from util import FeatureSources
+
+sources = FeatureSources(config, [
+    'test.c'
+])
+
+# Set the include search paths.
+env['CPPPATH'] = [
+    Dir('include'),
+    Dir('arch/%s/include' % (config['ARCH'])),
+    Dir('platform/%s/include' % (config['PLATFORM'])),
+]
+
+# Include the generated configuration header.
+env['CCFLAGS'] += ['-include', 'build/%s/config.h' % (env['CONFIG'])]
+env['ASFLAGS'] += ['-include', 'build/%s/config.h' % (env['CONFIG'])]
+
+# Platform code needs the location of the loader binary.
+env['KERNEL'] = File('kernel.elf')
+
+# Get the list of source files from the architecture/platform.
+arch_sources = SConscript(dirs = ['arch/' + config['ARCH']], exports = vars)
+platform_sources = SConscript(dirs = ['platform/' + config['PLATFORM']], exports = vars)
+
+sources = arch_sources + platform_sources + sources
+objects = map(env.Object, sources)
+
+# Link the kernel image.
+linkflags = env['LINKFLAGS'] + ['-Wl,-T,$LDSCRIPT']
+target = env.Program('kernel.elf', objects, LINKFLAGS = linkflags)
+Depends(target, env['LDSCRIPT'])
+
+# Generate various information files.
+env.AddPostAction(target, [
+    Action('$OBJDUMP -d $TARGET > ${TARGET.base}.lst', None),
+    Action('$READELF -a $TARGET > ${TARGET.base}.rde', None),
+    Action('$NM -C $TARGET | sort > ${TARGET.base}.sym', None),
+])

@@ -1,0 +1,2 @@
+CONFIG = 'bios'
+CROSS_COMPILE = '/Volumes/Infi/Tools/x86_64-pulsar/bin/x86_64-pulsar-'
