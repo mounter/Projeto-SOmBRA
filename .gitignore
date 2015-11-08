@@ -1,16 +1,23 @@
+# Some Generic Folders and Files
+*~
+*.swp
+*.pyc
+/.config*
+/build
+/.sconsign.dblite
+
 # Object files
 *.o
-*.elf
+*.ko
 
 # Libraries
+*.lib
 *.a
 
-# Pasta de output
-build/
+# Shared objects
+*.so
+*.so.*
+*.dylib
 
-# Ficheiros temporarios do SCONS
-.options.cache
-.sconsign.dblite
-
-# Ficheiros temporarios do sistema
+# Mac
 .DS_Store

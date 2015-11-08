@@ -1,210 +1,98 @@
+# coding: utf-8
 #
-# Este Build System e baseado no do projeto 'Initium'
-# criado pelo Gil Mendes (gil0mendes).
+# Copyright (C) 2015 Gil Mendes <gil00mendes@gmail.com>
 #
-# O codigo original pode ser encontrado aqui:
-# https://github.com/gil0mendes/Initium
-#
-# Este sistema usa o SCons que e desenvolvido em
-# Python de forma a facilitar a manutencao e de
-# forma facil extender a ferramenta com novas
-# funcionalidades.
+# Este sistema de compilação usa o SCons pois ele é escrito em Python e assim fica mais fácil de implmentar, manter e extender o sistema com novas funcionalidades.
 #
 
-# Build flags for both host and target.
-build_flags = {
-    'CCFLAGS': [
-        '-Wall', '-Wextra', '-Wno-variadic-macros', '-Wno-unused-parameter',
-        '-Wwrite-strings', '-Wmissing-declarations', '-Wredundant-decls',
-        '-Wno-format', '-Werror', '-Wno-error=unused', '-pipe',
-    ],
-    'CFLAGS': ['-std=gnu99'],
+# informação da release
+version = {
+    'VER_RELEASE':  1,
+    'VER_UPDATE':   0,
+    'VER_REVISION': 0
+}
+
+# warning flags do C/C++
+cc_warning_flags = [
+    '-Wall', '-Wextra', '-Wno-variadic-macros', '-Wno-unused-parameter',
+    '-Wwrite-strings', '-Wmissing-declarations', '-Wredundant-decls',
+    '-Wno-format', '-Werror', '-Wno-error=unused',
+]
+
+# warning flags especificas para o C++
+cxx_warning_flags = [
+    '-Wold-style-cast', '-Wsign-promo',
+]
+
+# variaveis para o target
+target_flags = {
+    'CCFLAGS': cc_warning_flags + ['-gdwarf-2', '-pipe', '-fno-omit-frame-pointer'],
+    'CFLAGS': ['-std=gnu11'],
+    'CXXFLAGS': cxx_warning_flags + ['-std=c++11'],
     'ASFLAGS': ['-D__ASM__'],
 }
 
-# GCC-specific build flags.
-gcc_flags = {
-    'CCFLAGS': ['-Wno-unused-but-set-variable'],
+# variaveis para definir no host. Não deve compilar o codigo com as nossas flags warning normais, pois alguns componentes não iram compilar.
+host_flags = {
+    'CCFLAGS': ['-pipe'],
+    'CFLAGS': ['-std=gnu99'],
+    'CXXFLAGS': filter(lambda f: f not in [
+        '-Wmissing-declarations', '-Wno-variadic-macros',
+        '-Wno-unused-but-set-variable'], cc_warning_flags),
+    'YACCFLAGS': ['-d'],
 }
 
-# Clang-specific build flags.
-clang_flags = {
-    # Clang's integrated assembler doesn't support 16-bit code.
-    'ASFLAGS': ['-no-integrated-as'],
-}
+##########################################
+# Configuração do ambiente de construção #
+##########################################
 
-# Build flags for target.
-target_flags = {
-    'CCFLAGS': [
-        '-gdwarf-2', '-pipe', '-nostdlib', '-nostdinc', '-ffreestanding',
-        '-fno-stack-protector', '-Os', '-fno-omit-frame-pointer',
-    ],
-    'ASFLAGS': ['-nostdinc'],
-    'LINKFLAGS': ['-nostdlib', '-Wl,--build-id=none'],
-}
+import os, sys, SCons.Errors
 
-###############
-# Build setup #
-###############
-
-import os, sys
-from subprocess import Popen, PIPE
-
+# adiciona o caminho da pasta utilities ao path
 sys.path = [os.path.abspath(os.path.join('utilities', 'build'))] + sys.path
-import util
 
-# Configurable build options.
-opts = Variables('.options.cache')
-opts.AddVariables(
-    ('CONFIG', 'Target system configuration name.'),
-    ('CROSS_COMPILE', 'Cross compiler tool prefix (prepended to all tool names).', ''),
+from manager import BuildManager
+from kconfig import ConfigParser
+from toolchain import ToolchainManager
+from util import RequireTarget
+import vcs
+
+# define a versão da compilação
+version['VER_STRING'] = '%d.%d' % (
+    version['VER_RELEASE'],
+    version['VER_UPDATE']
 )
 
-# Create the build environment.
-env = Environment(ENV = os.environ, variables = opts)
-opts.Save('.options.cache', env)
+if version['VER_REVISION']:
+    version['VER_STRING'] += '.%d' % (version['VER_REVISION'])
 
-# Get a list of known configurations.
-configs = SConscript('config/SConscript')
+revision = vcs.revision_id()
+if revision:
+    version['VER_STRING'] += '-%s' % (revision)
 
-# Generate help text.
-helptext  = 'To build Initium, a target system configuration must be specified on the command\n'
-helptext += 'line with the CONFIG option. The following configurations are available:\n'
-helptext += '\n'
-for name in sorted(configs.iterkeys()):
-    helptext += '  %-12s - %s\n' % (name, configs[name]['description'])
-helptext += '\n'
-helptext += 'The following build options can be set on the command line. These will be saved\n'
-helptext += 'for later invocations of SCons, so you do not need to specify them every time:\n'
-helptext += opts.GenerateHelpText(env)
-helptext += '\n'
-helptext += 'For information on how to build Initium, please refer to docs/README.md.\n'
-Help(helptext)
-
-# Make the output nice.
-verbose = ARGUMENTS.get('V') == '1'
-if not verbose:
-    def compile_str(msg, name):
-        return ' \033[0;34m%-6s\033[0m %s' % (msg, name)
-    env['ARCOMSTR']     = compile_str('AR', '$TARGET')
-    env['ASCOMSTR']     = compile_str('ASM', '$SOURCE')
-    env['ASPPCOMSTR']   = compile_str('ASM', '$SOURCE')
-    env['CCCOMSTR']     = compile_str('CC', '$SOURCE')
-    env['CXXCOMSTR']    = compile_str('CXX', '$SOURCE')
-    env['LINKCOMSTR']   = compile_str('LINK', '$TARGET')
-    env['RANLIBCOMSTR'] = compile_str('RANLIB', '$TARGET')
-    env['GENCOMSTR']    = compile_str('GEN', '$TARGET')
-    env['STRIPCOMSTR']  = compile_str('STRIP', '$TARGET')
-
-# Merge in build flags.
-for (k, v) in build_flags.items():
-    env[k] = v
-
-# Add a builder to preprocess linker scripts.
-env['BUILDERS']['LDScript'] = Builder(action = Action(
-    '$CC $_CCCOMCOM $ASFLAGS -E -x c $SOURCE | grep -v "^\#" > $TARGET',
-    '$GENCOMSTR'))
-
-################################
-# Host build environment setup #
-################################
-
-# Set up the host build environment.
-host_env = env.Clone()
-
-# Add compiler-specific flags.
-output = Popen([host_env['CC'], '--version'], stdout=PIPE, stderr=PIPE).communicate()[0].strip()
-host_env['IS_CLANG'] = output.find('clang') >= 0
-if host_env['IS_CLANG']:
-    for (k, v) in clang_flags.items():
-        host_env[k] += v
-else:
-    for (k, v) in gcc_flags.items():
-        host_env[k] += v
-
-# Build host system utilities.
-#SConscript('utilities/SConscript',
-#    variant_dir = os.path.join('build', 'host'),
-#    exports = {'env': host_env})
-
-##################################
-# Target build environment setup #
-##################################
-
-# Check if the configuration specified is invalid.
-if not env.has_key('CONFIG'):
-    util.StopError("No target system configuration specified. See 'scons -h'.")
-elif not env['CONFIG'] in configs:
-    util.StopError("Unknown configuration '%s'." % (env['CONFIG']))
-
-config = configs[env['CONFIG']]['config']
-
-# Detect which compiler to use.
-compilers = ['cc', 'gcc', 'clang']
-compiler = None
-for name in compilers:
-    path = env['CROSS_COMPILE'] + name
-    if util.which(path):
-        compiler = path
-        break
-if not compiler:
-    util.StopError('Toolchain has no usable compiler available.')
-
-# Set paths to the various build utilities. The stuff below is to support use
-# of clang's static analyzer.
-if os.environ.has_key('CC') and os.path.basename(os.environ['CC']) == 'ccc-analyzer':
-    env['CC'] = os.environ['CC']
-    env['ENV']['CCC_CC'] = compiler
-else:
-    env['CC'] = compiler
-env['AS']      = env['CROSS_COMPILE'] + 'as'
-env['OBJDUMP'] = env['CROSS_COMPILE'] + 'objdump'
-env['READELF'] = env['CROSS_COMPILE'] + 'readelf'
-env['NM']      = env['CROSS_COMPILE'] + 'nm'
-env['STRIP']   = env['CROSS_COMPILE'] + 'strip'
-env['AR']      = env['CROSS_COMPILE'] + 'ar'
-env['RANLIB']  = env['CROSS_COMPILE'] + 'ranlib'
-env['OBJCOPY'] = env['CROSS_COMPILE'] + 'objcopy'
-env['LD']      = env['CROSS_COMPILE'] + 'ld'
-
-# Override default assembler - it uses as directly, we want to use GCC.
-env['ASCOM'] = '$CC $_CCCOMCOM $ASFLAGS -c -o $TARGET $SOURCES'
-
-# Merge in build flags.
-for (k, v) in target_flags.items():
-    env[k] += v
-
-# Add compiler-specific flags.
-output = Popen([compiler, '--version'], stdout=PIPE, stderr=PIPE).communicate()[0].strip()
-env['IS_CLANG'] = output.find('clang') >= 0
-if env['IS_CLANG']:
-    for (k, v) in clang_flags.items():
-        env[k] += v
-else:
-    for (k, v) in gcc_flags.items():
-        env[k] += v
-
-# Add the compiler include directory for some standard headers.
-incdir = Popen([env['CC'], '-print-file-name=include'], stdout=PIPE).communicate()[0].strip()
-env['CCFLAGS'] += ['-isystem', incdir]
-env['ASFLAGS'] += ['-isystem', incdir]
-
-# Change the Decider to MD5-timestamp to speed up the build a bit.
+# altera o Decider para MD5-timestamp para aumentar a velocidade de compilação
 Decider('MD5-timestamp')
 
-defaults = []
+host_env = Environment(ENV = os.environ)
+target_env = Environment(platform = 'posix', ENV = os.environ)
+manager = BuildManager(host_env, target_env)
 
-SConscript('source/SConscript',
-    variant_dir = os.path.join('build', env['CONFIG']),
-    exports = ['config', 'defaults', 'env'])
+# carrega as configurações (se já existirem)
+config = ConfigParser('.config')
+manager.AddVariable('_CONFIG', config)
 
-Default(defaults)
+# export o Config, Manager e a variavél Version para alem deste Script
+Export('config', 'manager', 'version')
 
-###############
-# QEMU target #
-###############
+# define o template de ambiente do host
+for (k, v) in host_flags.items():
+    host_env[k] = v
 
-# Add a target to run the test script for this configuration (if it exists).
-script = os.path.join('utilities', 'test', 'test-%s.sh' % (env['CONFIG']))
-if os.path.exists(script):
-    Alias('qemu', env.Command('__qemu', defaults, Action(script, None)))
+# os hosts Darwin possivelmente têm as bibliotecas em /opt, não é Gil? ;)
+if os.uname()[0] == 'Darwin':
+    host_env['CPPPATH'] = ['/opt/local/include']
+    host_env['LIBPATH'] = ['/opt/local/lib']
+
+# cria o ambiente para o host e para os utilitários
+env = manager.CreateHost(name = 'host')
+SConscript('utilities/SConscript', variant_dir = os.path.join('build', 'host'), exports = ['env'])

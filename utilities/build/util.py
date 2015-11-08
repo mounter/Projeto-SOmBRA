@@ -51,3 +51,9 @@ def which(program):
                 return exe_file
 
     return None
+
+# Raise an error if a certain target is not specified.
+def RequireTarget(target, error):
+    if GetOption('help') or target in COMMAND_LINE_TARGETS:
+        return
+    raise SCons.Errors.StopError(error)
