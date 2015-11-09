@@ -1,6 +1,0 @@
-timeout	10
-title	SOmBRA X86_64 (SafeMode)
-root	(cd)
-kernel	/loader.elf
-module	/kernel.elf
-boot

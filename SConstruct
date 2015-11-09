@@ -106,3 +106,12 @@ if not config.configured() or 'config' in COMMAND_LINE_TARGETS:
     RequireTarget('config',
         "Configuração em falta ou desatualizada. Por favor usar a opção 'config'.")
     Return()
+
+# inicializa o gestor do toolchain
+toolchain = ToolchainManager(config)
+Alias('toolchain', Command('__toolchain', [], Action(toolchain.update, None)))
+
+# se o toolchain estiver desatualizado, precisamos de o criar primeiro
+if toolchain.check() or 'toolchain' in COMMAND_LINE_TARGETS:
+    RequireTarget('toolchain', "O toolchain está desatualizado. Atualize usando a opção 'toolchain'")
+    Return()
