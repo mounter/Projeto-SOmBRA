@@ -1,0 +1,74 @@
+#
+# Copyright (C) 2015 Gil Mendes <gil00mendes@gmail.com>
+#
+
+config 32BIT
+    bool
+
+config 64BIT
+    bool
+
+config SYS_SUPPORTS_LITTLE_ENDIAN
+    bool
+
+config SYS_SUPPORTS_BIG_ENDIAN
+    bool
+
+config TOOLCHAIN_LLVM
+    bool
+
+config TOOLCHAIN_GCC
+    bool
+
+config ARCH_X86
+    bool
+    select SYS_SUPPORTS_LITTLE_ENDIAN
+    select TOOLCHAIN_LLVM
+
+choice
+    prompt "Arquitetura"
+    default ARCH_AMD64
+
+config ARCH_AMD64
+    bool "AMD64"
+    select 64BIT
+    select ARCH_X86
+    help
+        Compila para um sistema de 64-bit num processado x86.
+
+endchoice
+
+config ARCH
+    string
+    default "amd64" if ARCH_AMD64
+
+config BOOTARCH
+    string
+    default "x86" if ARCH_AMD64
+    default ARCH
+
+config TOOLCHAIN_TARGET
+    string
+    default "x86_64-pulsar" if ARCH_AMD64
+
+config ARCH_ASFLAGS
+    string
+    default ""
+
+config ARCH_CCFLAGS
+    string
+    default ""
+
+choice
+    prompt "Endianness"
+    default LITTLE_ENDIAN
+
+config BIG_ENDIAN
+    bool "Big endian"
+    depends on SYS_SUPPORTS_BIG_ENDIAN
+
+config LITTLE_ENDIAN
+    bool "Little endian"
+    depends on SYS_SUPPORTS_LITTLE_ENDIAN
+
+endchoice

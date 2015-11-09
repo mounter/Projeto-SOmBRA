@@ -96,3 +96,13 @@ if os.uname()[0] == 'Darwin':
 # cria o ambiente para o host e para os utilitários
 env = manager.CreateHost(name = 'host')
 SConscript('utilities/SConscript', variant_dir = os.path.join('build', 'host'), exports = ['env'])
+
+# adiciona um target para correr a interface de configuração
+env['ENV']['KERNELVERSION'] = version['VER_STRING']
+Alias('config', env.ConfigMenu('__config', ['Kconfig']))
+
+# se o ficheiro de configuração não existir, todo o que podemos fazer é configurar. Apresenta um erro para notificar o utilizador a informar que necessita de configurar para proceder à compilação do sistema.
+if not config.configured() or 'config' in COMMAND_LINE_TARGETS:
+    RequireTarget('config',
+        "Configuração em falta ou desatualizada. Por favor usar a opção 'config'.")
+    Return()

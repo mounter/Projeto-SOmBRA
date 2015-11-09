@@ -1,0 +1,24 @@
+#
+# Copyright (C) 2015 Gil Mendes <gil00mendes@gmail.com>
+#
+
+choice
+    prompt "Platform"
+
+config PLATFORM_EFI
+    bool "EFI"
+    depends on ARCH_AMD64
+    help
+        Target the EFI/UEFI PCs (MACs and new PCs).
+
+config PLATFORM_BIOS
+    bool "Standard PC"
+    help
+      Target the built system to x86 PCs with legacy BIOS.
+
+endchoice
+
+config PLATFORM
+    string
+    default "bios" if PLATFORM_BIOS
+    default "efiamd64" if PLATFORM_EFI
