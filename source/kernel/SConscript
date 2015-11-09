@@ -1,41 +1,81 @@
-vars = ['config', 'defaults', 'env']
+# coding: utf-8
+#
+# Copyright (C) 2015 Gil Mendes <gil00mendes@gmail.com>
+#
 
-Import(*vars)
+Import('config', 'manager', 'version')
 from util import FeatureSources
 
 sources = FeatureSources(config, [
     'init.c'
 ])
 
-# Set the include search paths.
-env['CPPPATH'] = [
-    Dir('include'),
-    Dir('arch/%s/include' % (config['ARCH'])),
-    Dir('platform/%s/include' % (config['PLATFORM'])),
-]
+##########################################
+# Configuração do Ambiente de Construção #
+##########################################
 
-# Include the generated configuration header.
-env['CCFLAGS'] += ['-include', 'build/%s/config.h' % (env['CONFIG'])]
-env['ASFLAGS'] += ['-include', 'build/%s/config.h' % (env['CONFIG'])]
+# Cria o ambiente para o Kernel
+env = manager.CreateBare(name = 'kernel', flags = {
+    'LIBS': [],
+    'CPPPATH': [
+        Dir('include'),
+        Dir('arch/%s/include' % (config['ARCH'])),
+        Dir('platform/%s/include' % (config['PLATFORM'])),
+    ],
+    'CCFLAGS': [
+        '-nostdlib', '-nostdinc', '-ffreestanding',
+        '-fno-optimize-sibling-calls', '-fno-stack-protector',
+        '-include', 'build/%s-%s/config.h' % (config['ARCH'], config['PLATFORM']),
+    ],
+    'CXXFLAGS': [
+        '-fno-exceptions', '-fno-rtti',
+    ],
+    'ASFLAGS': [
+        '-nostdinc', '-include',
+        'build/%s-%s/config.h' % (config['ARCH'], config['PLATFORM']),
+    ],
+    'LINKFLAGS': [
+        '-nostdlib',
+    ],
+    'CPPDEFINES': {
+        '__KERNEL': None,
+        '__KERNEL_PRIVATE': None,
+    },
+})
 
-# Platform code needs the location of the loader binary.
-env['KERNEL'] = File('kernel.elf')
+# Adiciona o diretorio include do compilador para a inclusão de alguns headers standard
+from subprocess import Popen, PIPE
+incdir = Popen([env['CC'], '-print-file-name=include'], stdout = PIPE).communicate()[0].strip()
+env['CCFLAGS'] += ['-isystem', incdir]
+env['ASFLAGS'] += ['-isystem', incdir]
 
-# Get the list of source files from the architecture/platform.
-arch_sources = SConscript(dirs = ['arch/' + config['ARCH']], exports = vars)
-platform_sources = SConscript(dirs = ['platform/' + config['PLATFORM']], exports = vars)
+# Gera um ficheiro com as informações da versão
+def gen_version_c(target, source, env):
+    f = open(str(target[0]), 'w')
+    f.write('int kernel_ver_release = %d;\n' % (version['VER_RELEASE']))
+    f.write('int kernel_ver_update = %d;\n' % (version['VER_UPDATE']))
+    f.write('int kernel_ver_revision = %d;\n' % (version['VER_REVISION']))
+    f.write('const char *kernel_ver_string = "%s";\n' % (version['VER_STRING']))
+    f.close()
+AlwaysBuild(env.Command('version.c', [], env.Action(gen_version_c, None)))
 
+# Obtme a lista de ficheiros a serem compilados na pasta da arquitetura e da plataforma
+arch_sources = SConscript(dirs = ['arch/' + config['ARCH']], exports = ['env'])
+platform_sources = SConscript(dirs = ['platform/' + config['PLATFORM']], exports = ['env'])
 sources = arch_sources + platform_sources + sources
-objects = map(env.Object, sources)
 
-# Link the kernel image.
-linkflags = env['LINKFLAGS'] + ['-Wl,-T,$LDSCRIPT']
-target = env.Program('kernel.elf', objects, LINKFLAGS = linkflags)
-Depends(target, env['LDSCRIPT'])
+# Faz o link da imagem do kernel
+env.Program('kernel-unstripped', map(env.Object, sources),
+    LINKFLAGS = env['LINKFLAGS'] + ['-Wl,-T,$LDSCRIPT'])
+Depends('kernel-unstripped', env['LDSCRIPT'])
 
-# Generate various information files.
-env.AddPostAction(target, [
-    Action('$OBJDUMP -d $TARGET > ${TARGET.base}.lst', None),
-    Action('$READELF -a $TARGET > ${TARGET.base}.rde', None),
-    Action('$NM -C $TARGET | sort > ${TARGET.base}.sym', None),
+# Gera varios ficheiros de informação e uma imagem stripped do kernel
+env.Command(['kernel', 'kernel.lst', 'kernel.rde', 'kernel.sym'], 'kernel-unstripped', [
+    Action('$STRIP --strip-debug $SOURCE -o ${TARGETS[0]}', '$GENCOMSTR'),
+    Action('$OBJDUMP -d $SOURCE > ${TARGETS[1]}', None),
+    Action('$READELF -aW $SOURCE > ${TARGETS[2]}', None),
+    Action('$NM -C $SOURCE | sort > ${TARGETS[3]}', None),
 ])
+
+# informa o ambiente de destribuição da localização do kernel
+manager['dist']['KERNEL'] = File('kernel')
