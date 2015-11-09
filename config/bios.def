@@ -1,7 +1,0 @@
-config = {
-	'description': 'x86 PCs with legacy BIOS',
-	'includes': ['arch/ia32', 'platform/bios'],
-	'config' : {
-		'DEBUG_LEVEL': 2
-	}
-}

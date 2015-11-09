@@ -3,16 +3,18 @@
 #
 
 choice
-    prompt "Platform"
+    prompt "Plataforma"
+    default PLATFORM_BIOS if ARCH_X86
 
 config PLATFORM_EFI
     bool "EFI"
-    depends on ARCH_AMD64
+    depends on ARCH_X86
     help
         Target the EFI/UEFI PCs (MACs and new PCs).
 
 config PLATFORM_BIOS
     bool "Standard PC"
+    depends on ARCH_X86
     help
       Target the built system to x86 PCs with legacy BIOS.
 
@@ -21,4 +23,4 @@ endchoice
 config PLATFORM
     string
     default "bios" if PLATFORM_BIOS
-    default "efiamd64" if PLATFORM_EFI
+    default "efi" if PLATFORM_EFI

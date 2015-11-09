@@ -1,0 +1,13 @@
+# coding: utf-8
+#
+# Copyright (C) 2015 Gil Mendes <gil00mendes@gmail.com>
+#
+
+from util import FeatureSources
+Import('config', 'env')
+
+sources = FeatureSources(config, [
+
+])
+
+Return('sources')
