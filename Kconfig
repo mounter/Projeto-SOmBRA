@@ -88,3 +88,7 @@ config DEBUG
         level. It also disable the boot splash screen by default. The build
         system will generally be slower, so don't enable it unless you are
         doing kernel development or have another reason to.
+
+menu "Configuração do Initium"
+source "source/boot/Kconfig"
+endmenu

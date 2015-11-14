@@ -90,16 +90,17 @@ def iso_image_func(target, source, env):
     # Copy stuff into it.
     shutil.copy(kernel, os.path.join(tmpdir, 'pulsar'))
     shutil.copy(fsimage, os.path.join(tmpdir, 'pulsar', 'modules'))
-    for mod in env['MODULES']:
-        shutil.copy(str(mod), os.path.join(tmpdir, 'pulsar', 'modules'))
+    #for mod in env['MODULES']:
+    #    shutil.copy(str(mod), os.path.join(tmpdir, 'pulsar', 'modules'))
 
     # Write the configuration.
     f = open(os.path.join(tmpdir, 'boot', 'loader.cfg'), 'w')
     f.write('set "timeout" 5\n')
-    f.write('entry "Infinity OS" {\n')
+    f.write('entry "SOmBRA" {\n')
     if len(config['FORCE_VIDEO_MODE']) > 0:
         f.write('   set "video_mode" "%s"\n' % (config['FORCE_VIDEO_MODE']))
-    f.write('   laos "/pulsar/kernel" "/pulsar/modules"\n')
+    #f.write('   laos "/pulsar/kernel" "/pulsar/modules"\n')
+    f.write('   initium "/pulsar/kernel"\n')
     f.write('}\n')
     f.close()
 
@@ -124,5 +125,6 @@ def iso_image_func(target, source, env):
     return 0
 def iso_image_emitter(target, source, env):
     assert len(source) == 1
-    return (target, [env['KERNEL'], env['LOADER'], env['CDBOOT']] + env['MODULES'] + source)
+    #return (target, [env['KERNEL'], env['LOADER'], env['CDBOOT']] + env['MODULES'] + source)
+    return (target, [env['KERNEL'], env['LOADER'], env['CDBOOT']] + source)
 iso_image_builder = Builder(action = Action(iso_image_func, '$GENCOMSTR'), emitter = iso_image_emitter)

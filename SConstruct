@@ -38,7 +38,7 @@ target_flags = {
 # warning normais, pois alguns componentes não iram compilar.
 host_flags = {
     'CCFLAGS': ['-pipe'],
-    'CFLAGS': ['-std=gnu99'],
+    'CFLAGS': ['-std=gnu11'],
     'CXXFLAGS': filter(lambda f: f not in [
         '-Wmissing-declarations', '-Wno-variadic-macros',
         '-Wno-unused-but-set-variable'], cc_warning_flags),

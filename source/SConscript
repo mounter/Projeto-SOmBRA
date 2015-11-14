@@ -29,5 +29,58 @@ dist = manager['dist']
 # constroi o kernel
 SConscript(dirs = ['kernel'])
 
-# We place the final output binaries in a single directory.
-#env['OUTDIR'] = Dir('bin')
+###########
+# Initium #
+###########
+
+# Cria o ambiente para a compilação do bootloader
+env = manager.CreateBare(name = 'boot', flags = {
+        'LIBS': [],
+        'CCFLAGS': [ '-nostdlib', '-nostdinc', '-ffreestanding', '-fno-stack-protector'],
+        'ASFLAGS': ['-nostdinc'],
+        'LINKFLAGS': ['-nostdlib'],
+})
+
+# Faz o override de qualquer level de optimização, nos queremos optimizar para o
+# tamanho
+env['CCFLAGS'] = filter(lambda f: f[0:2] != '-O', env['CCFLAGS']) + ['-Os']
+
+# Adiciona o directorio de includes do compiler por causa de alguns headers
+# standard
+from subprocess import Popen, PIPE
+incdir = Popen([env['CC'], '-print-file-name=include'], stdout = PIPE).communicate()[0].strip()
+env['CCFLAGS'] += ['-isystem', incdir]
+env['ASFLAGS'] += ['-isystem', incdir]
+
+# define a localização do output
+env['OUTDIR'] = Dir('boot/bin')
+
+# Construi o bootloader
+defaults = []
+SConscript(dirs = ['boot'], exports = ['env', 'defaults'])
+
+dist['LOADER'] = File('boot/bin/loader')
+if config['PLATFORM'] == 'bios':
+    dist['CDBOOT'] = File('boot/platform/bios/stage1/cdboot.bin')
+#####################
+# Construi a imagem #
+#####################
+
+# A contrução do sistema de ficheiros é feita todas as vezes para garantir que as coisas novas são copiadas
+fsimage = dist.FSImage('fsimage.tar', [])
+AlwaysBuild(fsimage)
+
+# Cria alguns alias e define o target por defeito
+#Alias('loader', dist['LOADER'])
+Alias('kernel', dist['KERNEL'])
+Alias('fsimage', fsimage)
+
+# Adiciona as "peças" para fazer uma imagem bootable
+if config['PLATFORM'] == 'bios':
+    Default(Alias('cdrom', dist.ISOImage('cdrom.iso', fsimage)))
+
+    # Adiciona um target para correr o qemu
+    Alias('qemu', dist.Command('__qemu', ['cdrom.iso'], Action(config['QEMU_BINARY'] + ' -cdrom $SOURCE -boot d ' + config['QEMU_OPTS'], None)))
+else:
+    Default(dist['KERNEL'])
+    Default(dist['LOADER'])

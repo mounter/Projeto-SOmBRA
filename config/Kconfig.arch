@@ -31,7 +31,6 @@ choice
 
 config ARCH_AMD64
     bool "AMD64"
-    select 64BIT
     select ARCH_X86
     help
         Compila para um sistema de 64-bit num processado x86.

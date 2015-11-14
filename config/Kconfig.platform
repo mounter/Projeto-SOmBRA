@@ -9,12 +9,14 @@ choice
 config PLATFORM_EFI
     bool "EFI"
     depends on ARCH_X86
+    select 64BIT
     help
         Target the EFI/UEFI PCs (MACs and new PCs).
 
 config PLATFORM_BIOS
     bool "Standard PC"
     depends on ARCH_X86
+    select 32BIT
     help
       Target the built system to x86 PCs with legacy BIOS.
 
