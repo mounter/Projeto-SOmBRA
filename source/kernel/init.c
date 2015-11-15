@@ -5,6 +5,9 @@
  */
 
 #include <compiler.h>
+#include <initium.h>
+
+INITIUM_IMAGE(INITIUM_IMAGE_SECTIONS || INITIUM_IMAGE_LOG);
 
 /**
  * Ponto de entrada do kernel.
