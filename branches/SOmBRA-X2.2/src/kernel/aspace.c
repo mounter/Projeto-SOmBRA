@@ -1,4 +1,5 @@
 #include <aspace.h>
+
 #include <mm.h>
 #include <error.h>
 #include <stdio.h>
@@ -7,12 +8,12 @@
 aspace_t *aspace_create(){
 	aspace_t *as;
 
-	// Aloca memória para uma aspace.
+	// Aloca memÃ³ria para uma aspace.
 	as = (aspace_t *)zmalloc(sizeof(aspace_t));
 	if(as == NULL)
 		return NULL;
 
-	// Seta o flag indicando que o aspace é válido.
+	// Seta o flag indicando que o aspace Ã© vÃ¡lido.
 	as->magic = AS_MAGIC;
 	return as;
 }
@@ -20,10 +21,10 @@ aspace_t *aspace_create(){
 // Destroi uma aspace.
 void aspace_destroy(aspace_t *as){
 	if(as->magic != AS_MAGIC){
-		panic("destroy_aspace: 'as' inválida endereco: %x\n", as);
+		panic("destroy_aspace: 'as' invÃ¡lida endereco: %x\n", as);
 	}
 
-	// Desaloca memória alocado para a aplicação.
+	// Desaloca memÃ³ria alocado para a aplicaÃ§Ã£o.
 	//if(as->user_mem != NULL){
 	//	free(as->user_mem);
 	//}
@@ -36,31 +37,31 @@ void aspace_destroy(aspace_t *as){
 	
 	memset(as, 0, sizeof(aspace_t));
 
-	// Libera a memória alocada para guardar as seções.
+	// Libera a memÃ³ria alocada para guardar as seÃ§Ãµes.
 	free(as);
 }
 
-// Insere uma nova seção dentro de um aspace.
+// Insere uma nova seÃ§Ã£o dentro de um aspace.
 int aspace_section_add(aspace_t *as, uint_arch_t adr, uint_arch_t size, uint_arch_t flags, uint_arch_t offset){
 	sect_t *new_sect;
 
 	//printf("aspace_section_add(%X, %u, %X, %X)\n", adr, size, flags, offset);
 
-	// Aloca memória para mais uma seção e faz a copia das seções anteriores.
+	// Aloca memÃ³ria para mais uma seÃ§Ã£o e faz a copia das seÃ§Ãµes anteriores.
 	new_sect = (sect_t *)realloc(as->sect,sizeof(sect_t) * (as->num_sects + 1));
 	if(new_sect == NULL)
 	{
 		return -ERROR_NO_EXEC;
 	}
 	
-	// Seta o novo ponteiro para as novas seções.
+	// Seta o novo ponteiro para as novas seÃ§Ãµes.
 	as->sect = new_sect;
 
-	// new_sect aponta para a útlima seção(a nova seção).
+	// new_sect aponta para a Ãºtlima seÃ§Ã£o(a nova seÃ§Ã£o).
 	new_sect = &as->sect[as->num_sects];
-	as->num_sects++; // Incrementa o número de seções.
+	as->num_sects++; // Incrementa o nÃºmero de seÃ§Ãµes.
 
-	// Seta os valores das novas seções.
+	// Seta os valores das novas seÃ§Ãµes.
 	new_sect->adr = adr;
 	new_sect->size = size;
 	new_sect->flags = flags;
